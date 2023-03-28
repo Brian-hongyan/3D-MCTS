@@ -15,6 +15,16 @@ file 3. The pocket file, PDB format. (To speed the calculation, it can be replac
 
 You can use the library that we provide in frags/fragment.txt or modify it according to your need.
 
-### Step2: Prepare the initial fragment
+### Step3: Prepare the initial fragment
 
-We provide three initial fragments in the directory '''init/'''. You can provide initial fragments according to your need.
+We provide three initial fragments in the directory ```init/```. You can provide initial fragments according to your need.
+
+### Step4: Prepare the initial fragment
+
+Run the Code.
+
+```
+python 3D-MCTS.py --num_sims 100000 --ligand ./ligand.sdf --protein ./protein.pdb --pocket ./pocket.pdb --score -7 --qed 0.3 --processor 48 --start 1
+```
+
+Molecules that meet the criteria are saved in this directory ```record/```.
