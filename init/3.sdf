@@ -1,0 +1,154 @@
+7
+                    3D
+ Structure written by MMmdl.
+ 11 11  0  0  1  0            999 V2000
+   20.8954    4.9919    8.0952 C   0  0  0  0  0  0
+   21.5799    3.8426    8.0932 C   0  0  0  0  0  0
+   23.0094    4.1767    8.0917 C   0  0  0  0  0  0
+   23.1136    5.5103    8.0928 C   0  0  0  0  0  0
+   21.7816    6.2048    8.0952 C   0  0  0  0  0  0
+   19.7943    5.0607    8.0966 H   0  0  0  0  0  0
+   21.1524    2.8265    8.0928 H   0  0  0  0  0  0
+   23.8430    3.4554    8.0900 H   0  0  0  0  0  0
+   24.0702    6.0600    8.0921 H   0  0  0  0  0  0
+   21.6394    6.8174    9.0156 H   0  0  0  0  0  0
+   21.6371    6.8191    7.1763 H   0  0  0  0  0  0
+  1  2  2  0  0  0
+  1  5  1  0  0  0
+  1  6  1  0  0  0
+  2  3  1  0  0  0
+  2  7  1  0  0  0
+  3  4  2  0  0  0
+  3  8  1  0  0  0
+  4  5  1  0  0  0
+  4  9  1  0  0  0
+  5 10  1  0  0  0
+  5 11  1  0  0  0
+M  END
+> <s_m_entry_id>
+1
+
+> <s_m_entry_name>
+7_nh.1
+
+> <i_m_stars>
+0
+
+> <s_m_entry_id>
+17
+
+> <s_m_entry_name>
+Structure17
+
+> <s_pdb_PDB_TITLE>
+HUMAN CDK2 WITH TYPE II INHIBITOR
+
+> <s_pdb_PDB_ID>
+5A14
+
+> <r_pdb_PDB_CRYST1_a>
+64.41
+
+> <r_pdb_PDB_CRYST1_b>
+67.27
+
+> <r_pdb_PDB_CRYST1_c>
+89.13
+
+> <r_pdb_PDB_CRYST1_alpha>
+90
+
+> <r_pdb_PDB_CRYST1_beta>
+90
+
+> <r_pdb_PDB_CRYST1_gamma>
+90
+
+> <s_pdb_PDB_CRYST1_Space_Group>
+P 21 21 21
+
+> <i_pdb_PDB_CRYST1_z>
+4
+
+> <s_pdb_PDB_CLASSIFICATION>
+TRANSFERASE
+
+> <s_pdb_PDB_DEPOSITION_DATE>
+27-APR-15
+
+> <s_pdb_PDB_format_version>
+3.3
+
+> <r_pdb_PDB_R>
+0.194000005722046
+
+> <r_pdb_PDB_Rfree>
+0.239999994635582
+
+> <r_pdb_PDB_RESOLUTION>
+2
+
+> <s_pdb_PDB_EXPDTA>
+X-RAY DIFFRACTION
+
+> <r_pdb_PDB_EXPDTA_TEMPERATURE>
+100
+
+> <r_pdb_PDB_EXPDTA_PH>
+7.5
+
+> <s_pdb_PDB_REMARK_350_Biomolecule_1_Chains>
+A
+
+> <s_pdb_PDB_REMARK_350_Biomolecule_1_Transformation_1>
+1.000000 0.000000 0.000000   0.000000;0.000000 1.000000 0.000000   0.000000;0.000000 0.000000 1.000000   0.000000
+
+> <s_m_Source_Path>
+C:\Users\86188\Desktop
+
+> <s_m_Source_File>
+5a14.pdb
+
+> <i_m_Source_File_Index>
+1
+
+> <s_ppw_entry_id_backup>
+15
+
+> <b_ppw_prepared>
+1
+
+> <s_ppw_prepared_with_version>
+2018-3
+
+> <b_ppw_assigned_bond_orders>
+1
+
+> <b_ppw_added_hydrogens>
+1
+
+> <b_ppw_treated_metals>
+1
+
+> <b_ppw_created_disulfur>
+1
+
+> <b_ppw_deleted_far_waters>
+1
+
+> <chiral flag>
+1
+
+> <version>
+0
+
+> <s_m_Source_Path>
+C:\Users\86188\Desktop
+
+> <s_m_Source_File>
+7_nh.sdf
+
+> <i_m_Source_File_Index>
+1
+
+$$$$
