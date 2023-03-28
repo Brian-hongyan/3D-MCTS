@@ -27,4 +27,4 @@ Run the Code.
 python 3D-MCTS.py --num_sims 100000 --ligand ./ligand.sdf --protein ./protein.pdb --pocket ./pocket.pdb --score -7 --qed 0.3 --processor 48 --start 1
 ```
 
-Molecules that meet the criteria are saved in this directory ```record/```.
+Molecules that meet the criteria are saved in ```record/```.
