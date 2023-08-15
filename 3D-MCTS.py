@@ -21,6 +21,8 @@ from rdkit.Chem import rdMolDescriptors
 from rdkit.Chem import QED
 from rdkit.Chem import Descriptors
 
+
+# Please replace the PATH for GNINA and ADFR first.
 GNINA = '/home/hongyan/software/gnina'
 ADFR = '/home/hongyan/software/ADFR/bin'
 
