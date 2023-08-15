@@ -19,6 +19,14 @@ openbabel >= 3.1.1           ## conda
 rdkit >= 2022.03.2           ## conda
 func-timeout >= 4.3.5        ## pip
 
+
+After installing gnina and ADFR, please edit the PATH for these two softwares in 3D-MCTS.py:
+
+''
+GNINA = '/home/hongyan/software/gnina'
+ADFR = '/home/hongyan/software/ADFR/bin'
+''
+
 ```
 
 
