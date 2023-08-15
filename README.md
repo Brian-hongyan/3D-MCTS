@@ -1,7 +1,7 @@
 # 3D-MCTS
 3D-MCTS: A general structure-based molecule generation method with MCTS.
 
-![error](https://github.com/Brian-hongyan/3D-MCTS/tree/main/method.tif)
+![error](https://github.com/Brian-hongyan/3D-MCTS/blob/main/method.jpg)
 
 ## How to sample molecules for a specific protein
 
