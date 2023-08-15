@@ -10,17 +10,15 @@ We present a novel search-based framework, 3D-MCTS, for structure-based de novo 
 # Environment
 ```
 # software
-gnina # https://github.com/gnina/gnina
-ADFR # https://ccsb.scripps.edu/adfr/
+gnina         ## https://github.com/gnina/gnina
+ADFR          ## https://ccsb.scripps.edu/adfr/
 
 # python
-python >= 3.7 # conda
-openbabel >= 3.1.1 # conda
-rdkit >= 2022.03.2 # conda
-func-timeout >= 4.3.5 # pip
+python >= 3.7                ## conda
+openbabel >= 3.1.1           ## conda
+rdkit >= 2022.03.2           ## conda
+func-timeout >= 4.3.5        ## pip
 
-# environment to reproduce
-conda env create -f DeepCoSI.yml
 ```
 
 
