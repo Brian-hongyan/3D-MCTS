@@ -43,6 +43,11 @@ file 3. The pocket file, PDB format. (To speed the calculation. It can be replac
 ### Step2: Prepare the fragment library
 
 You can use the library that we provide in frags/fragment.txt or modify it according to your need.
+You can transform the customized fragments to building blocks needed by 3D-MCTS using ```prepare_building_blocks.py```:
+
+'''
+python prepare_building_blocks.py --frag customized_frags.smi --o customized_building_blocks.smi
+'''
 
 ### Step3: Prepare the initial fragment
 
