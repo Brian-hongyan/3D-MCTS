@@ -34,11 +34,11 @@ ADFR = '/home/hongyan/software/ADFR/bin'
 
 ### Step1: Prepare several files needed
 
-file 1. The protein structure file, PDB format. (Without ligand atoms)
+file 1. The protein structure file, ```pdb``` format. (Without ligand atoms)
 
-file 2. The ligand file, sdf format. (To determine the position of binding site.)
+file 2. The ligand file, ```sdf``` format. (To determine the position of binding site.)
 
-file 3. The pocket file, PDB format. (To speed the calculation. It can be replaced by file 1.)
+file 3. The pocket file, ```pdb``` format. (To speed the calculation. It can be replaced by file 1.)
 
 ### Step2: Prepare the fragment library
 
