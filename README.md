@@ -14,10 +14,10 @@ gnina         ## https://github.com/gnina/gnina
 ADFR          ## https://ccsb.scripps.edu/adfr/
 
 # python
-python >= 3.7                ## conda
-openbabel >= 3.1.1           ## conda
-rdkit >= 2022.03.2           ## conda
-func-timeout >= 4.3.5        ## pip
+python >= 3.7                ## 
+openbabel >= 3.1.1           ## conda install openbabel -c openbabel
+rdkit >= 2022.03.2           ## conda install rdkit -c rdkit
+func-timeout >= 4.3.5        ## pip install func-timeout
 
 
 After installing gnina and ADFR, please edit the PATH for these two softwares in 3D-MCTS.py:
