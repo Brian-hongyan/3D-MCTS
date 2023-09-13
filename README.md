@@ -1,4 +1,4 @@
-:loudspeaker: # 3D-MCTS
+# :loudspeaker:3D-MCTS
 3D-MCTS: A general structure-based molecule generation method with MCTS.
 
 ## Abstract
