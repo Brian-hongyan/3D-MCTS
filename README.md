@@ -1,5 +1,5 @@
 # :loudspeaker:3D-MCTS
-3D-MCTS: A general structure-based molecule generation method with MCTS.
+3D-MCTS: A Flexible Data-Free Framework for Structure-Based De Novo Drug Design with Reinforcement Learning.
 
 ## Abstract
 
