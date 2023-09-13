@@ -1,26 +1,22 @@
 import random
 import math
 import hashlib
-import logging
 import argparse
-from tkinter.ttk import setup_master
 from rdkit import Chem as ch
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from rdkit.Chem import rdMolAlign
 from rdkit.Chem import rdMolTransforms
-from rdkit.Chem import Lipinski
 import numpy as np
-import os, glob
+import os
 from openbabel.pybel import *
-import time, subprocess
+import time
 import multiprocessing, traceback
 from scipy.spatial.distance import cdist
 from func_timeout import func_set_timeout
 from rdkit.Chem import rdMolDescriptors
 from rdkit.Chem import QED
 from rdkit.Chem import Descriptors
-
 
 # Please replace the PATH for GNINA and ADFR first.
 GNINA = '/home/hongyan/software/gnina'
@@ -40,14 +36,19 @@ parser.add_argument('--processor', action="store", type=int, help='number of pro
 parser.add_argument('--start', action="store", type=int, help='start fragment', default=1)
 
 args = parser.parse_args()
+
 os.system('mkdir node vinaa record tmp init_pose unique')
 os.system(rf'{ADFR}/prepare_receptor -r {args.protein} -o pro_test.pdbqt')
+
+# Used to balance exploration and exploitation
 SCALAR = 1 / (2 * math.sqrt(2.0))
 FRAGMENT_LIB = []
 with open('./frags/fragments.txt','r') as f:
     lines = f.readlines()
     for line in lines:
         FRAGMENT_LIB.append(line.strip())
+
+# Rules for reassembly of fragments
 Iso_dic = {
     1: [3, 5, 10],  ###
     2: [],
@@ -86,6 +87,10 @@ POCKET_CORS = [P.GetPositions()[i] for i in range(len(POCKET.GetAtoms()))]
 
 
 def dock(init):
+
+    '''
+    Generate the conformation of the starting fragment.
+    '''
     mymol = list(readfile('sdf', rf'init/{init}.sdf'))[0]
     mymol.write("pdbqt", rf'init/{init}.pdbqt', overwrite=True)
     os.system(
@@ -130,6 +135,9 @@ def dock(init):
 
 
 def assign_iso(frag_id, Del_plus, start=False):
+    '''
+    Isotope labeling of fragment attachment sites
+    '''
     if start == False:
         lig_name = rf'{frag_id}_{Del_plus}'
         mol_h = Chem.AddHs(Chem.SDMolSupplier(rf'./vinaa/{lig_name}_repair.sdf')[0], addCoords=True)
@@ -243,9 +251,12 @@ def frag_avail(h1):
     return lib_avail
 
 
-def m_c(par, h1, frag, frag_id, smile):
+def mol_connect(par, h1, frag, frag_id, smile):
+    '''
+    Connect new molecular fragments
+    '''
     @func_set_timeout(5)
-    def m_c2(par, h1, frag, frag_id, smile):
+    def mol_connect2(par, h1, frag, frag_id, smile):
         for atom in par.GetAtoms():
             atom.SetIntProp('FromPar', 1)
             if atom.GetIsotope() != 0 and atom.GetIdx() == h1:
@@ -343,13 +354,16 @@ def m_c(par, h1, frag, frag_id, smile):
         return [frag_id, tag, smile]
 
     try:
-        a = m_c2(par, h1, frag, frag_id, smile)
+        a = mol_connect2(par, h1, frag, frag_id, smile)
         return a
     except:
         return [frag_id, 1, smile]
 
 
-def m_r(frag_id, Del_plus, smile):
+def mol_rotate(frag_id, Del_plus, smile):
+    '''
+    Rotate newly introduced dihedral angles to get multiple molecular conformations
+    '''
     mol = ch.SDMolSupplier(rf'tmp/{frag_id}.sdf', removeHs=False)[0]
     Dihedral_atoms = mol.GetProp("DihAtoms").split(',')
     Deg = float(mol.GetProp("DihDeg")) + Del_plus
@@ -362,6 +376,9 @@ def m_r(frag_id, Del_plus, smile):
 
 
 def score0(frag_id, Del_plus, smile):
+    '''
+    Determine whether newly connected fragments can cause collisions between atoms
+    '''
     time1 = time.time()
     lig = ch.SDMolSupplier(rf'tmp/{frag_id}_{Del_plus}.sdf', removeHs=False)[0]
     for atom in lig.GetAtoms():
@@ -404,6 +421,9 @@ def score0(frag_id, Del_plus, smile):
 
 
 def score1(frag_id, Del_plus, smile):
+    '''
+    Prepare files for scoring.
+    '''
     time1 = time.time()
     pro = 'pro_test.pdbqt'
     mol = ch.SDMolSupplier(rf'tmp/{frag_id}_{Del_plus}.sdf', removeHs=False)[0]
@@ -419,6 +439,9 @@ def score1(frag_id, Del_plus, smile):
 
 
 def score3(frag_id, Del_plus, smile):
+    '''
+    Obtain the binding affinity of the molecule
+    '''
     time1 = time.time()
     pro = 'pro_test.pdbqt'
     lig_name = rf'{frag_id}_{Del_plus}'
@@ -434,7 +457,9 @@ def score3(frag_id, Del_plus, smile):
 
 
 def repair(frag_id, Del_plus, score, smile):
-
+    '''
+    Repair the chemical valence of atoms after minimization
+    '''
     lig_name = rf'{frag_id}_{Del_plus}'
     f = open(rf'./vinaa/{lig_name}_minimize.sdf', 'r').readlines()
     f_ = open(rf'./vinaa/{lig_name}_repair.sdf', 'w')
@@ -465,6 +490,9 @@ def repair(frag_id, Del_plus, score, smile):
 
 
 def qed_score(frag_id, Del_plus, score, smile):
+    '''
+    Obtain the drug-like properties of a molecule
+    '''
     lig_name = rf'{frag_id}_{Del_plus}'
     mol = Chem.SDMolSupplier(rf'./tmp/{lig_name}.sdf', removeHs=False)[0]
     qed = QED.qed(mol)
@@ -472,6 +500,9 @@ def qed_score(frag_id, Del_plus, score, smile):
 
 
 def roulette(select_list):
+    '''
+    roulette algorithm
+    '''
     sum_val = sum(select_list)
     random_val = random.random()
     probability = 0
@@ -487,6 +518,10 @@ def roulette(select_list):
 
 
 class State():
+    '''
+    The status of the node. There are two types of nodes in 3D-MCTS, one is used to determine the connection position of fragments (type 1),
+    and the other is used to determine the type and conformation of fragments (type 0).
+    '''
     def __init__(self, state_type=0, sdf='start.sdf', h1=None, Frag_Deg=None, frag=None, sco=-3.55479, ter_tag=None,
                  sta=[], choices=[]):
         self.type = state_type
@@ -508,7 +543,6 @@ class State():
 
         elif self.type == 1:
 
-            mol = ch.SDMolSupplier(self.sdf, removeHs=False)[0]
             self.h1 = h1
 
             self.score = 0
@@ -516,117 +550,11 @@ class State():
             self.choices = choices + [self.h1]
             self.ter_tag = 0
 
-    def next_state(self):
-        if self.type == 0:
-
-            nextmove = random.choice(self.h1s_avail)
-            next = State(state_type=1, sdf=rf'{self.sdf}', h1=nextmove, sta=self.states)
-            return next
-
-        elif self.type == 1:
-
-            mol = ch.SDMolSupplier(self.sdf, removeHs=False)[0]
-
-            h1_isotop = mol.GetAtomWithIdx(self.h1).GetIsotope()
-
-            try:
-                self.frags_avail = frag_avail(h1_isotop)
-            except:
-                print(self.sdf, self.h1, h1_isotop)
-
-            frags = []
-            mols = []
-            h1s = []
-            ids = []
-            j = 0
-            time1 = time.time()
-            for i in self.frags_avail:
-                frags.append(ch.AddHs(ch.MolFromSmiles(i)))
-                mols.append(mol)
-                h1s.append(self.h1)
-                j += 1
-                ids.append(j)
-            pool = multiprocessing.Pool(47)
-            ls_1 = pool.starmap(m_c, zip(mols, h1s, frags, ids, self.frags_avail))
-            pool.close()
-            pool.join()
-            print('connect', time.time() - time1)
-            time1 = time.time()
-            ls_2 = []
-            for id_tag_smile in ls_1:
-                if id_tag_smile[1] == 0:
-                    for deg in np.arange(0, 360, 15):
-                        ls_2.append([id_tag_smile[0], deg, id_tag_smile[2]])
-            pool = multiprocessing.Pool(47)
-            pool.starmap(m_r, ls_2)
-            pool.close()
-            pool.join()
-            print('rotate', time.time() - time1)
-
-            time1 = time.time()
-            pool = multiprocessing.Pool(47)
-            ls_3 = pool.starmap(score0, ls_2)
-            pool.close()
-            pool.join()
-            print('clash', time.time() - time1)
-
-            ls_2 = [[i[0], i[1], i[3]] for i in ls_3 if i[2] == 0]
-            if len(ls_2) > 0:
-
-                self.ter_tag = 0
-
-                time1 = time.time()
-                pool = multiprocessing.Pool(47)
-                pool.starmap(score1, ls_2)
-                pool.close()
-                pool.join()
-                print('score1', time.time() - time1)
-
-                time1 = time.time()
-                pool = multiprocessing.Pool(47)
-                ls_4 = pool.starmap(score3, ls_2)
-                pool.close()
-                pool.join()
-                print('score3', time.time() - time1)
-
-                try:
-                    last_score = self.states[-3]
-                except:
-                    last_score = 0
-
-                self.ter_tag = 0
-                ids_degs_scores = []
-                scores = []
-                for i in ls_4:
-                    if (i[2] < last_score + 1.5 and i[2] < 0):
-                        ids_degs_scores.append(i)
-                        scores.append(abs(i[2]))
-                        if (i[2] < np.min(SCORES) or i[2] < -7.3) and i[2] not in SCORES:
-                            mol = ch.SDMolSupplier(rf'vinaa/{i[0]}_{i[1]}_score.sdf', removeHs=False)[0]
-                            global RECORD
-                            writer = Chem.SDWriter(rf'record/record_{RECORD}.sdf')
-                            writer.SetProps(['Score'])
-                            mol.SetProp('Score', str(i[2]))
-                            writer.write(mol)
-                            writer.close()
-                            RECORD += 1
-                            SCORES.append(i[2])
-                ls_4 = ids_degs_scores
-                if len(scores) > 0:
-                    nextmove = ls_4[roulette(scores)]
-                    os.system(rf'cp tmp/{nextmove[0]}_{nextmove[1]}.sdf state0.sdf')
-                    sco = nextmove[2]
-                    next = State(state_type=0, sdf=rf'state0.sdf', Frag_Deg=nextmove[:2], sco=sco, sta=self.states)
-                    return next
-                else:
-                    self.ter_tag = 1
-                    return self
-            else:
-                self.ter_tag = 1
-                return self
-
-
     def next_states(self):
+        '''
+        Get all possibilities for the next state of the current state.
+
+        '''
         if self.type == 0:
             pass
 
@@ -650,19 +578,22 @@ class State():
                 h1s.append(self.h1)
                 j += 1
                 ids.append(j)
+            # fragment connection
             pool = multiprocessing.Pool(args.processor)
-            ls_1 = pool.starmap(m_c, zip(mols, h1s, frags, ids, self.frags_avail))
+            ids_tags_smiles = pool.starmap(mol_connect, zip(mols, h1s, frags, ids, self.frags_avail))
             pool.close()
             pool.join()
             # print(time.time()-time1)
             time1 = time.time()
-            ls_2 = []
-            for id_tag_smile in ls_1:
+            ids_degs_smiles = []
+            for id_tag_smile in ids_tags_smiles:
                 if id_tag_smile[1] == 0:
                     for deg in np.arange(0, 360, 15):
-                        ls_2.append([id_tag_smile[0], deg, id_tag_smile[2]])
+                        ids_degs_smiles.append([id_tag_smile[0], deg, id_tag_smile[2]])
+
+            # Rotate dihedral angles to obtain multiple conformations
             pool = multiprocessing.Pool(args.processor)
-            pool.starmap(m_r, ls_2)
+            pool.starmap(mol_rotate, ids_degs_smiles)
             pool.close()
             pool.join()
             # print(time.time() - time1)
@@ -670,55 +601,49 @@ class State():
 
             time1 = time.time()
             pool = multiprocessing.Pool(args.processor)
-            ls_3 = pool.starmap(score0, ls_2)
+            ids_degs_judge_smiles = pool.starmap(score0, ids_degs_smiles)
             pool.close()
             pool.join()
             # print(time.time() - time1)
 
-            ls_2 = [[i[0], i[1], i[3]] for i in ls_3 if i[2] == 0]
-            if len(ls_2) > 0:
-                # time1 = time.time()
+            ids_degs_smiles = [[i[0], i[1], i[3]] for i in ids_degs_judge_smiles if i[2] == 0]
+            if len(ids_degs_smiles) > 0:
                 pool = multiprocessing.Pool(args.processor)
-                pool.starmap(score1, ls_2)
+                pool.starmap(score1, ids_degs_smiles)
                 pool.close()
                 pool.join()
-                # print(time.time() - time1)
 
-                # time1 = time.time()
                 pool = multiprocessing.Pool(args.processor)
-                ls_4 = pool.starmap(score3, ls_2)
+                ids_degs_scores_smiles = pool.starmap(score3, ids_degs_smiles)
                 pool.close()
                 pool.join()
-                # print('xscore',time.time() - time1)
-                # ids_degs_scores_sorted = sorted(ids_degs_scores, key=lambda x: x[2])
-                ids_degs_scores = [i for i in ls_4 if i[2] <= (self.states[-2] + 0.5)]
+                ids_degs_scores = [i for i in ids_degs_scores_smiles if i[2] <= (self.states[-2] + 0.5)]
 
-
-                # ids_degs_scores_sorted = sorted(ids_degs_scores, key=lambda x: x[2])
-                # ls_4 = ids_degs_scores_sorted
-                ls_4 = ids_degs_scores
-                ls_4_selected = []
+                # Sort multiple conformations according to binding affinity
+                ids_degs_scores_smiles = ids_degs_scores
+                ids_degs_scores_smiles_selected = []
                 ids_degs_scores_sorted = sorted(ids_degs_scores, key=lambda x: x[2])
-                ls_4_dic = {}
+                ids_degs_scores_smiles_dic = {}
                 for i in ids_degs_scores_sorted:
                     try:
-                        if len(ls_4_dic[i[0]]) < 1:
-                            # if len(ls_4_dic[i[0]]) < 24:
-                            ls_4_dic[i[0]].append(i)
+                        if len(ids_degs_scores_smiles_dic[i[0]]) < 1:
+                            ids_degs_scores_smiles_dic[i[0]].append(i)
                         else:
                             continue
                     except:
-                        ls_4_dic[i[0]] = [i]
-                for value in ls_4_dic.values():
-                    ls_4_selected.extend(value)
+                        ids_degs_scores_smiles_dic[i[0]] = [i]
+                for value in ids_degs_scores_smiles_dic.values():
+                    ids_degs_scores_smiles_selected.extend(value)
 
+
+                # Repair the structure after minimization
                 pool = multiprocessing.Pool(args.processor)
-                pool.starmap(repair, ls_4_selected)
+                pool.starmap(repair, ids_degs_scores_smiles_selected)
                 pool.close()
                 pool.join()
 
-
-                for i in ls_4_selected:
+                # Save the molecules that match the criteria
+                for i in ids_degs_scores_smiles_selected:
                     if i[2] < (args.score):
                         mol = ch.SDMolSupplier(rf'tmp/{i[0]}_{i[1]}.sdf', removeHs=False)[0]
                         global RECORD
@@ -746,10 +671,10 @@ class State():
                                 NO_QED_GOOD.append(i[2])
 
                 if False:
-                    self.ids_degs_scores = ls_4[:50]
+                    self.ids_degs_scores = ids_degs_scores_smiles[:50]
                 else:
                     pool = multiprocessing.Pool(args.processor)
-                    ids_degs_scores = pool.starmap(qed_score, ls_4_selected)
+                    ids_degs_scores = pool.starmap(qed_score, ids_degs_scores_smiles_selected)
                     pool.close()
                     pool.join()
 
@@ -769,6 +694,8 @@ class State():
                 return []
 
     def terminal(self, tag):
+
+        # Determine whether the current state meets the termination conditions
         if self.type == 1:
             if self.ter_tag == 1:
                 return True
@@ -824,9 +751,6 @@ class State():
             return True
         return False
 
-
-
-
 class Node():
     def __init__(self, state, parent=None, node_id=1, best_score=-3.55479, reward=0, qed=1):
         self.visits = 0
@@ -867,36 +791,29 @@ class Node():
 
 
 def UCTSEARCH(budget, root, start_score=0, num_moves_lambda=None):
+    # Begin the MCTS
     start = time.time()
     global GOOD_SCORES
     global NO_QED_GOOD
-    front = TREEPOLICY(root, start_score, num_moves_lambda)
-    BACKUP2(front)
 
-    if GOOD_SCORES == []:
-        GOOD_SCORES = [0]
-    if NO_QED_GOOD == []:
-        NO_QED_GOOD = [0]
-    return [
-        len(SCORES), len(NO_QED), len(GOOD_SCORES), len(NO_QED_GOOD), np.min(SCORES), np.min(NO_QED),
-        (time.time() - start) / 3600
-    ]
+    for iter in range(int(budget)):
+        front = TREEPOLICY(root, start_score, num_moves_lambda)
+        BACKUP2(front)
 
 
 def TREEPOLICY(node, start_score, num_moves_lambda):
+    # Choose whether to expand the node based on the status of the current node
     while node.state.terminal('state1.sdf') == False:
         if len(node.children) == 0:
-            if False:
-                return node
-            else:
-                node = EXPAND(node, start_score)
+            node = EXPAND(node, start_score)
         else:
-
             node = BESTCHILD(node, SCALAR, start_score)
     return node
 
 
 def EXPAND(node, start_score):
+
+    # Get the children of a node and add them to the tree
     global NODE_ID
     if node.state.type == 0:
         for nextmove in node.state.h1s_avail:
@@ -922,6 +839,7 @@ def EXPAND(node, start_score):
 
 def BESTCHILD(node, scalar, start_score):
 
+    # Select child nodes based on the node's UCB
     scores = []
     scores2 = []
     for c in node.children:
@@ -956,6 +874,9 @@ def DEFAULTPOLICY(node):
 
 
 def BACKUP2(node):
+    '''
+    After a search is completed, backpropagation is performed to update the number of visits to the node.
+    '''
     parent_node = node
     while parent_node != None:
         parent_node.visits += 1
@@ -1003,13 +924,12 @@ if __name__ == "__main__":
 
     results = []
     i = args.start
+    # Obtain binding modes of starting fragments using molecular docking
     results.extend(dock(i))
+    # Choose the best docking conformation
     results.sort(key=lambda results: results[2])
-    result = []
-    i = 0
-    while result == []:
-        print(i, results[i][0], results[i][1])
+    for i in range(len(results)):
+        # Label starting fragments with isotopes for new fragment ligation
         assign_iso(results[i][0], results[i][1], start=True)
         current_node = Node(State(sta=[], sco=results[1][2]), best_score=results[i][2])
         result = UCTSEARCH(args.num_sims, current_node, start_score=results[i][2])
-        i += 1
