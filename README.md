@@ -42,8 +42,8 @@ file 3. The pocket file, PDB format. (To speed the calculation. It can be replac
 
 ### Step2: Prepare the fragment library
 
-You can use the library that we provide in frags/fragment.txt or modify it according to your need.
-You can transform the customized fragments to building blocks needed by 3D-MCTS using ```prepare_building_blocks.py```:
+We provide a fragment library comes from small molecule drugs: ```frags/fragment.txt```. We recommend users to modify it according specific needs.
+We also provide a script to help users transform their customized fragments to building blocks needed by 3D-MCTS using ```prepare_building_blocks.py```:
 
 ```
 python prepare_building_blocks.py --frag customized_frags.smi --o customized_building_blocks.smi
@@ -51,7 +51,7 @@ python prepare_building_blocks.py --frag customized_frags.smi --o customized_bui
 
 ### Step3: Prepare the initial fragment
 
-We provide three initial fragments in the directory ```init/```. You can provide initial fragments according to your need.
+We provide three initial fragments in the directory ```init/```. Users can prepare other starting fragments (```pdbqt format```) according to their needs.
 
 ### Step4: Run the Code.
 
