@@ -24,10 +24,10 @@ func-timeout >= 4.3.5        ## pip install func-timeout
 
 After installing gnina and ADFR, please edit the PATH for these two softwares in 3D-MCTS.py:
 
-''
+'''
 GNINA = '/home/hongyan/software/gnina'
 ADFR = '/home/hongyan/software/ADFR/bin'
-''
+'''
 
 ```
 
