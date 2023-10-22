@@ -1,5 +1,5 @@
 # :loudspeaker:3D-MCTS
-[3D-MCTS](https://pubs.rsc.org/en/content/articlelanding/2023/sc/d3sc04091g#!divAbstract): A Flexible Data-Free Framework for Structure-Based De Novo Drug Design with Reinforcement Learning.
+[3D-MCTS](https://pubs.rsc.org/en/content/articlelanding/2023/SC/D3SC04091G): A Flexible Data-Free Framework for Structure-Based De Novo Drug Design with Reinforcement Learning.
 
 ## Abstract
 
