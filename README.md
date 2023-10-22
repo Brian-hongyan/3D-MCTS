@@ -64,7 +64,7 @@ python 3D-MCTS.py --num_sims 100000 --ligand ./ligand.sdf --protein ./protein.pd
 Molecules that meet the criteria are saved in ```record/```.
 
 ## Cite us
-@Article{D3SC04091G,
+```@Article{D3SC04091G,
 author ="Du, Hongyan and Jiang, Dejun and Zhang, Odin and Wu, Zhenxing and Gao, Junbo and Zhang, Xujun and Wang, Xiaorui and Deng, Yafeng and Kang, Yu and Li, Dan and Pan, Peichen and Hsieh, Chang-Yu and Hou, Tingjun",
 title  ="A flexible data-free framework for structure-based de novo drug design with reinforcement learning",
 journal  ="Chem. Sci.",
@@ -74,4 +74,4 @@ publisher  ="The Royal Society of Chemistry",
 doi  ="10.1039/D3SC04091G",
 url  ="http://dx.doi.org/10.1039/D3SC04091G",
 }
-
+```
