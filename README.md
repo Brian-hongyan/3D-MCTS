@@ -63,7 +63,7 @@ python 3D-MCTS.py --num_sims 100000 --ligand ./ligand.sdf --protein ./protein.pd
 
 Molecules that meet the criteria are saved in ```record/```.
 
-## Cite us
+## Cite Us
 ```
 @Article{D3SC04091G,
 author ="Du, Hongyan and Jiang, Dejun and Zhang, Odin and Wu, Zhenxing and Gao, Junbo and Zhang, Xujun and Wang, Xiaorui and Deng, Yafeng and Kang, Yu and Li, Dan and Pan, Peichen and Hsieh, Chang-Yu and Hou, Tingjun",
