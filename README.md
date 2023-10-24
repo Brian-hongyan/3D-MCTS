@@ -8,7 +8,7 @@ We present a novel search-based framework, 3D-MCTS, for structure-based de novo 
 ![error](https://github.com/Brian-hongyan/3D-MCTS/blob/main/method.jpg)
 
 # DataSet
-The main data for benchmark is CrossDock2020, which is utilized by most of the methods. You can download the processed data from [this link](https://drive.google.com/drive/folders/1CzwxmTpjbrt83z_wBzcQncq84OVDPurM). This is the processed version of original files, which is processed by [Luoshi Tong](https://github.com/luost26/3D-Generative-SBDD/tree/main/data). 
+The main data for benchmark is CrossDock2020, which is utilized by most of the methods. You can download the processed data from [this link](https://drive.google.com/drive/folders/1CzwxmTpjbrt83z_wBzcQncq84OVDPurM). This is the processed version of original files, which is processed by [Shitong Luo](https://github.com/luost26/3D-Generative-SBDD/tree/main/data). 
 # Environment
 ```
 # software
