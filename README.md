@@ -30,7 +30,7 @@ ADFR = '/home/hongyan/software/ADFR/bin'
 '''
 
 ```
-
+The GNINA we used was binary version built by the authors on Mar 6, 2021. It can be downloaded [here](https://drive.google.com/file/d/1m6Uf3ALlEnvgztEzZrcy7gVO4Ag7VI6-/view?usp=drive_link).
 
 ## How to sample molecules for a specific protein
 
