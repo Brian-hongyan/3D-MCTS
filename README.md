@@ -58,7 +58,7 @@ We provide three initial fragments in the directory ```init/```. Users can prepa
 ### Step4: Run the Code.
 
 ```
-python 3D-MCTS.py --num_sims 100000 --ligand ./ligand.sdf --protein ./protein.pdb --pocket ./pocket.pdb --score -7 --qed 0.3 --processor 48 --start 1
+python 3D-MCTS.py --num_sims 100000 --ligand ./ligand.sdf --protein ./protein.pdb --pocket ./pocket.pdb --score -7 --qed 0.3 --processor 48 --start 1 --gnina '/home/hongyan/software/gnina' --adfr '/home/hongyan/software/ADFR/bin'
 ```
 
 Molecules that meet the criteria are saved in ```record/```.
