@@ -34,6 +34,10 @@ parser.add_argument('--score', action="store", type=float, help='threshold for v
 parser.add_argument('--qed', action="store", type=float, help='threshold for qed', default=0.3)
 parser.add_argument('--processor', action="store", type=int, help='number of processor for multiprocessing', default=48)
 parser.add_argument('--start', action="store", type=int, help='start fragment', default=1)
+parser.add_argument('--gnina', action="store", type=str, help='the path for GNINA',
+                    default='/home/hongyan/software/gnina')
+parser.add_argument('--adfr', action="store", type=str, help='the path for adfr',
+                    default='/home/hongyan/software/ADFR/bin')
 
 args = parser.parse_args()
 
@@ -47,6 +51,9 @@ with open('./frags/fragments.txt','r') as f:
     lines = f.readlines()
     for line in lines:
         FRAGMENT_LIB.append(line.strip())
+
+GNINA = args.gnina
+ADFR = args.adfr
 
 # Rules for reassembly of fragments
 Iso_dic = {
