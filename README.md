@@ -22,13 +22,6 @@ rdkit >= 2022.03.2           ## conda install rdkit -c rdkit
 func-timeout >= 4.3.5        ## pip install func-timeout
 
 
-After installing gnina and ADFR, please edit the PATH for these two softwares in 3D-MCTS.py:
-
-'''
-GNINA = '/home/hongyan/software/gnina'
-ADFR = '/home/hongyan/software/ADFR/bin'
-'''
-
 ```
 The GNINA we used was binary version built by the authors on Mar 6, 2021. It can be downloaded [here](https://drive.google.com/file/d/1m6Uf3ALlEnvgztEzZrcy7gVO4Ag7VI6-/view?usp=drive_link).
 
