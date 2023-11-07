@@ -34,7 +34,7 @@ parser.add_argument('--score', action="store", type=float, help='threshold for v
 parser.add_argument('--qed', action="store", type=float, help='threshold for qed', default=0.3)
 parser.add_argument('--processor', action="store", type=int, help='number of processor for multiprocessing', default=48)
 parser.add_argument('--start', action="store", type=str, help='start fragment', default='1')
-parser.add_argument('--frag_lib', action="store", type=str, help='fragment library', default='fragment')
+parser.add_argument('--frag_lib', action="store", type=str, help='fragment library', default='frags/fragment.txt')
 parser.add_argument('--gnina', action="store", type=str, help='the path for GNINA',
                     default='/home/hongyan/software/gnina')
 parser.add_argument('--adfr', action="store", type=str, help='the path for adfr',
@@ -48,7 +48,7 @@ os.system(rf'{ADFR}/prepare_receptor -r {args.protein} -o pro_test.pdbqt')
 # Used to balance exploration and exploitation
 SCALAR = 1 / (2 * math.sqrt(2.0))
 FRAGMENT_LIB = []
-with open(f'./frags/{args.frag_lib}.txt','r') as f:
+with open(f'{args.frag_lib}','r') as f:
     lines = f.readlines()
     for line in lines:
         FRAGMENT_LIB.append(line.strip())
