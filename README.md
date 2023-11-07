@@ -53,7 +53,8 @@ We provide three initial fragments in the directory ```init/```. Users can prepa
 ```
 python 3D-MCTS.py --num_sims 100000 --ligand ./ligand.sdf \
 --protein ./2v3r.pdb --pocket ./pocket.pdb --score -7 \
---start 1 \  # Use the start fragment 1.sdf in init directory
+--start 1 \  # Use the start fragment '1.sdf' in init directory
+--frag_lib 'frags/fragment.txt' \ # Specify the path of fragment library
 --qed 0.3 --processor 48 \
 --gnina '/home/hongyan/software/gnina' \
 --adfr '/home/hongyan/software/ADFR/bin'
