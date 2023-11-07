@@ -46,13 +46,14 @@ python prepare_building_blocks.py --frag customized_frags.smi --o customized_bui
 
 ### Step3: Prepare the initial fragment
 
-We provide three initial fragments in the directory ```init/```. Users can prepare other starting fragments (```pdbqt format```) according to their needs.
+We provide three initial fragments in the directory ```init/```. Users can prepare other starting fragments (```sdf format```) according to their needs.
 
 ### Step4: Run the Code.
 
 ```
 python 3D-MCTS.py --num_sims 100000 --ligand ./ligand.sdf \
 --protein ./2v3r.pdb --pocket ./pocket.pdb --score -7 \
+--start 1 \  # Use the start fragment 1.sdf in init directory
 --qed 0.3 --processor 48 --start 1 \
 --gnina '/home/hongyan/software/gnina' \
 --adfr '/home/hongyan/software/ADFR/bin'
