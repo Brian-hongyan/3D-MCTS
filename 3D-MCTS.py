@@ -939,5 +939,5 @@ if __name__ == "__main__":
     for i in range(len(results)):
         # Label starting fragments with isotopes for new fragment ligation
         assign_iso(results[i][0], results[i][1], start=True)
-        current_node = Node(State(sta=[], sco=results[1][2]), best_score=results[i][2])
+        current_node = Node(State(sta=[], sco=results[i][2]), best_score=results[i][2])
         result = UCTSEARCH(args.num_sims, current_node, start_score=results[i][2])
